@@ -6,7 +6,7 @@ from datetime import datetime,timedelta
 import time
 import json
 
-dm_contract_addr = "0x3AEDafF8FB09A4109Be8c10CF0c017d3f1F7DcDc"
+dm_contract_addr = "0xE2D26507981A4dAaaA8040bae1846C14E0Fb56bF"
 loop_sleep_seconds = 2
 start_polling_threshold_in_seconds = 0
 
