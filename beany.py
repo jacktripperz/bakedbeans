@@ -27,27 +27,21 @@ cycle = cmanager.build_cycle_from_config()
 nextCycleId = 1
 
 # methods
-def reinvest():
+def rebake():
     txn = dm_contract.functions.hatchEggs(wallet_public_addr).buildTransaction(c.get_tx_options(wallet_public_addr, 500000))
     return c.send_txn(txn, wallet_private_key)
 
-def withdraw():
+def eat():
     txn = dm_contract.functions.sellEggs().buildTransaction(c.get_tx_options(wallet_public_addr, 500000))
     return c.send_txn(txn, wallet_private_key)
 
-def get_user_info():
-    return dm_contract.functions.userInfo(wallet_public_addr).call()
-
-def daily_payout():
-    total = dm_contract.functions.payoutToReinvest(wallet_public_addr).call()
+def my_eggs():
+    total = dm_contract.functions.getMyEggs(wallet_public_addr).call()
     return total/1000000000000000000
 
-def payout_to_reinvest(userInfo):
-    directBonus = userInfo[4]/1000000000000000000
-    poolBonus = userInfo[5]/1000000000000000000
-    matchBonus = userInfo[6]/1000000000000000000
-    dailyPayout = daily_payout()
-    return dailyPayout + directBonus + poolBonus + matchBonus
+def payout_to_rebake():
+    total = dm_contract.functions.beanRewards(wallet_public_addr).call()
+    return total/1000000000000000000
 
 def buildTimer(t):
     mins, secs = divmod(int(t), 60)
@@ -103,43 +97,42 @@ nextCycleType = findCycleType(nextCycleId)
 def itterate(nextCycleId, nextCycleType):
     cycleMinimumBnb = findCycleMinimumBnb(nextCycleId)
     secondsUntilCycle = seconds_until_cycle(findCycleEndTimerAt(nextCycleId))
-    userInfo = get_user_info()
-    accountValue = userInfo[2]/1000000000000000000
-    payoutToReinvest = payout_to_reinvest(userInfo)
+    myEggs = my_eggs()
+    payoutToRebake = payout_to_rebake()
 
     dateTimeObj = datetime.now()
     timestampStr = dateTimeObj.strftime("[%d-%b-%Y (%H:%M:%S)]")
 
     sleep = loop_sleep_seconds 
     
-    print("********** MyDiamondTeam *******")
+    print("********** Baked Beans *******")
     print(f"{timestampStr} Next cycle type: {nextCycleType}")
-    print(f"{timestampStr} Total value: {accountValue:.5f} BNB")
-    print(f"{timestampStr} Estimated daily returns: {accountValue*0.015:.8f}")
-    print(f"{timestampStr} Payout available for reinvest/withdrawal: {payoutToReinvest:.8f}")
-    print(f"{timestampStr} Minimum BNB set for reinvest/withdrawal: {cycleMinimumBnb:.8f}")
-    print("************************")
+    print(f"{timestampStr} My eggs: {myEggs:.5f} BNB")
+    print(f"{timestampStr} Estimated daily returns: {myEggs*0.08:.8f}")
+    print(f"{timestampStr} Payout available for rebake/eat: {payoutToRebake:.8f}")
+    print(f"{timestampStr} Minimum BNB set for rebake/eat: {cycleMinimumBnb:.8f}")
+    print("******************************")
 
     if secondsUntilCycle > start_polling_threshold_in_seconds:
         sleep = secondsUntilCycle - start_polling_threshold_in_seconds
 
     countdown(int(sleep))
 
-    userInfo = get_user_info()
-    payoutToReinvest = payout_to_reinvest(userInfo)
+    payoutToRebake = payout_to_rebake()
 
-    if payoutToReinvest >= cycleMinimumBnb:
-        if nextCycleType == "reinvest":
-            reinvest()
-        if nextCycleType == "withdraw":
-            withdraw()
+    if payoutToRebake >= cycleMinimumBnb:
+        if nextCycleType == "rebake":
+            print("did rebake")
+            # rebake()
+        if nextCycleType == "eat":
+            eat()
         
-        if nextCycleType == "reinvest":
-            print("********** REINVESTED *******")
-            print(f"{timestampStr} Reinvested {payoutToReinvest:.8f} BNB to the pool!")
-        if nextCycleType == "withdraw":
-            print("********** WITHDREW *********")
-            print(f"{timestampStr} Withdrew {payoutToReinvest:.8f} BNB!")
+        if nextCycleType == "rebake":
+            print("********** REBAKED *******")
+            print(f"{timestampStr} Rebaked {payoutToRebake:.8f} BNB to the pool!")
+        if nextCycleType == "eat":
+            print("********** ATE ***********")
+            print(f"{timestampStr} Ate {payoutToRebake:.8f} BNB!")
 
         nextCycleId = getNextCycleId(nextCycleId)
         nextCycleType = findCycleType(nextCycleId)
