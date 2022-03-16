@@ -35,9 +35,9 @@ def eat():
     txn = dm_contract.functions.sellEggs().buildTransaction(c.get_tx_options(wallet_public_addr, 500000))
     return c.send_txn(txn, wallet_private_key)
 
-def my_eggs():
-    total = dm_contract.functions.getMyEggs(wallet_public_addr).call()
-    return total/1000000000000000000
+def my_beans():
+    total = dm_contract.functions.getMyMiners(wallet_public_addr).call()
+    return total
 
 def payout_to_rebake():
     total = dm_contract.functions.beanRewards(wallet_public_addr).call()
@@ -97,7 +97,7 @@ nextCycleType = findCycleType(nextCycleId)
 def itterate(nextCycleId, nextCycleType):
     cycleMinimumBnb = findCycleMinimumBnb(nextCycleId)
     secondsUntilCycle = seconds_until_cycle(findCycleEndTimerAt(nextCycleId))
-    myEggs = my_eggs()
+    myBeans = my_beans()
     payoutToRebake = payout_to_rebake()
 
     dateTimeObj = datetime.now()
@@ -107,10 +107,10 @@ def itterate(nextCycleId, nextCycleType):
     
     print("********** Baked Beans *******")
     print(f"{timestampStr} Next cycle type: {nextCycleType}")
-    print(f"{timestampStr} My eggs: {myEggs:.5f} BNB")
-    print(f"{timestampStr} Estimated daily returns: {myEggs*0.08:.8f}")
-    print(f"{timestampStr} Payout available for rebake/eat: {payoutToRebake:.8f}")
-    print(f"{timestampStr} Minimum BNB set for rebake/eat: {cycleMinimumBnb:.8f}")
+    print(f"{timestampStr} My beans: {myBeans} beans")
+    print(f"{timestampStr} Estimated daily beans: {myBeans*0.08:.3f}")
+    print(f"{timestampStr} Payout available for rebake/eat: {payoutToRebake:.8f} BNB")
+    print(f"{timestampStr} Minimum set for rebake/eat: {cycleMinimumBnb:.8f} BNB")
     print("******************************")
 
     if secondsUntilCycle > start_polling_threshold_in_seconds:
@@ -122,8 +122,7 @@ def itterate(nextCycleId, nextCycleType):
 
     if payoutToRebake >= cycleMinimumBnb:
         if nextCycleType == "rebake":
-            print("did rebake")
-            # rebake()
+            rebake()
         if nextCycleType == "eat":
             eat()
         
