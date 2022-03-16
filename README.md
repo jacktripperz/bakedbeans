@@ -15,7 +15,7 @@ The script relies on many things - such as blockchain congestion, dropped networ
 1. A clean and secure computer/nuc/raspberry pi that can run 24/7.
 2. Minor programming knowledge
 
-## The My DiamondTeam v2
+## The Baked Beans
 
 The [Baked beans](https://bakedbeans.io?ref=0x361472B5784e83fBF779b015f75ea0722741f304) is a high risk, high reward contract that operates similar to a high yield 
 certificate of deposit. You can participate by investing through these steps: 
