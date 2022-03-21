@@ -135,8 +135,8 @@ def itterate(nextCycleId, nextCycleType):
 
         internalNextCycleId = getNextCycleId(nextCycleId)
         internalNextCycleType = findCycleType(nextCycleId)
-        print(f"{timestampStr} Next cycleId is: {nextCycleId}")
-        print(f"{timestampStr} Next cycle type will be: {nextCycleType}")
+        print(f"{timestampStr} Next cycleId is: {internalNextCycleId}")
+        print(f"{timestampStr} Next cycle type will be: {internalNextCycleType}")
         print("**************************")
 
         print(f"{timestampStr} Sleeping for 1 min until next cycle starts..")
