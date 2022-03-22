@@ -84,7 +84,8 @@ def getNextCycleId(currentCycleId):
     if currentCycleId == cycleLength:
         return 1
     else:
-        return currentCycleId + 1
+        newCycleId = currentCycleId + 1
+        return newCycleId
 
 def seconds_until_cycle(endTimerAt):
     time_delta = datetime.combine(
@@ -134,7 +135,7 @@ def itterate(nextCycleId, nextCycleType):
             print(f"{timestampStr} Ate {payoutToRebake:.8f} BNB!")
 
         internalNextCycleId = getNextCycleId(nextCycleId)
-        internalNextCycleType = findCycleType(nextCycleId)
+        internalNextCycleType = findCycleType(internalNextCycleId)
         print(f"{timestampStr} Next cycleId is: {internalNextCycleId}")
         print(f"{timestampStr} Next cycle type will be: {internalNextCycleType}")
         print("**************************")
