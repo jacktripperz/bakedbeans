@@ -23,8 +23,8 @@ dm_abi = json.load(f)
 # create contract
 dm_contract = c.connect_to_contract(dm_contract_addr, dm_abi)
 
+# create cycle
 cycle = cmanager.build_cycle_from_config()
-nextCycleId = 1
 
 # methods
 def rebake():
@@ -79,7 +79,7 @@ def findCycleEndTimerAt(cycleId):
         else:
             x = None
 
-def getNextCycleId(currentCycleId):
+def calcNextCycleId(currentCycleId):
     cycleLength = len(cycle)
     if currentCycleId == cycleLength:
         return 1
@@ -94,6 +94,7 @@ def seconds_until_cycle(endTimerAt):
     return time_delta.seconds
 
 # create infinate loop that checks contract every set sleep time
+nextCycleId = cmanager.getNextCycleId()
 nextCycleType = findCycleType(nextCycleId)
 def itterate(nextCycleId, nextCycleType):
     cycleMinimumBnb = findCycleMinimumBnb(nextCycleId)
@@ -134,7 +135,10 @@ def itterate(nextCycleId, nextCycleType):
             print("********** ATE ***********")
             print(f"{timestampStr} Ate {payoutToRebake:.8f} BNB!")
 
-        internalNextCycleId = getNextCycleId(nextCycleId)
+        calculatedNextCycleId = calcNextCycleId(nextCycleId)
+        cmanager.updateNextCycleId(calculatedNextCycleId)
+
+        internalNextCycleId = cmanager.getNextCycleId()
         internalNextCycleType = findCycleType(internalNextCycleId)
         print(f"{timestampStr} Next cycleId is: {internalNextCycleId}")
         print(f"{timestampStr} Next cycle type will be: {internalNextCycleType}")
