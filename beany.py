@@ -102,7 +102,8 @@ def itterate():
     global nextCycleId
     global nextCycleType
     cycleMinimumBnb = findCycleMinimumBnb(nextCycleId)
-    secondsUntilCycle = seconds_until_cycle(findCycleEndTimerAt(nextCycleId))
+    nextCycleTime = findCycleEndTimerAt(nextCycleId)
+    secondsUntilCycle = seconds_until_cycle(nextCycleTime)
     myBeans = my_beans()
     payoutToRebake = payout_to_rebake()
 
@@ -112,7 +113,9 @@ def itterate():
     sleep = loop_sleep_seconds 
     
     print("********** Baked Beans *******")
+    print(f"{timestampStr} Next cycle id: {nextCycleId}")
     print(f"{timestampStr} Next cycle type: {nextCycleType}")
+    print(f"{timestampStr} Next cycle time: {nextCycleTime}")
     print(f"{timestampStr} My beans: {myBeans} beans")
     print(f"{timestampStr} Estimated daily beans: {myBeans*0.08:.3f}")
     print(f"{timestampStr} Payout available for rebake/eat: {payoutToRebake:.8f} BNB")
@@ -138,14 +141,7 @@ def itterate():
         if nextCycleType == "eat":
             print("********** ATE ***********")
             print(f"{timestampStr} Ate {payoutToRebake:.8f} BNB!")
-
-        calculatedNextCycleId = calcNextCycleId(nextCycleId)
-        cmanager.updateNextCycleId(calculatedNextCycleId)
-
-        nextCycleId = cmanager.getNextCycleId()
-        nextCycleType = findCycleType(nextCycleId)
-        print(f"{timestampStr} Next cycleId is: {nextCycleId}")
-        print(f"{timestampStr} Next cycle type will be: {nextCycleType}")
+        
         print("**************************")
 
         print(f"{timestampStr} Sleeping for 1 min until next cycle starts..")
